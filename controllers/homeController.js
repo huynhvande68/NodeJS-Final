@@ -40,6 +40,15 @@ const registerValidator = [
     .isEmail()
     .withMessage("Đây không phải là email hợp lệ"),
 
+    check("name")
+    .exists()
+    .withMessage("Vui lòng nhập số điện thoại người dùng")
+    .notEmpty()
+    .withMessage("Không được để trống số điện thoại người dùng")
+    .isLength({ min: 10 })
+    .withMessage("Tên người dùng phải từ 10 số"),
+
+
   check("password")
     .exists()
     .withMessage("Vui lòng nhập mật khẩu người dùng")
@@ -138,8 +147,9 @@ let getRegister = (req, res) => {
   const error = req.flash("error") || "";
   const name = req.flash("name") || "";
   const email = req.flash("email") || "";
+  const phone = req.flash("phone") || "";
 
-  res.render("register", { error: error, name: name, email: email });
+  res.render("register", { error: error, name: name, email: email, phone: phone });
 };
 let postRegister =
   (registerValidator,
@@ -147,18 +157,19 @@ let postRegister =
     let result = validationResult(req);
 
     if (result.errors.length === 0) {
-      const { name, email, password } = req.body;
+      const { name, email,phone, password } = req.body;
 
       const hashed = bcrypt.hashSync(password, 10);
 
-      const sql = "insert into account(name, email, password) values(?,?,?)";
-      const params = [name, email, hashed];
+      const sql = "insert into account(name, email,phone, password) values(?,?,?,?)";
+      const params = [name, email,phone, hashed];
 
       db.query(sql, params, (err, result, fields) => {
         if (err) {
           req.flash("error", err.message);
           req.flash("name", name);
           req.flash("email", email);
+          req.flash("phone", phone);
 
           return res.redirect("/account/register");
         } else if (result.affectedRows === 1) {
@@ -168,6 +179,7 @@ let postRegister =
           req.flash("error", "Đăng kí thất bại");
           req.flash("name", name);
           req.flash("email", email);
+          req.flash("phone", phone);
 
           return res.redirect("/account/register");
         }
@@ -186,6 +198,8 @@ let postRegister =
       req.flash("error", message);
       req.flash("name", name);
       req.flash("email", email);
+      req.flash("phone", phone);
+
       res.redirect("/account/register");
     }
   });
