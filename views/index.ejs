@@ -359,6 +359,12 @@
         position: fixed;
         left: 40%;
         top: 40%;
+        max-height: 0px;
+        overflow: hidden;
+        transition: max-height 0.5s;
+      }
+      .composer.open-compose{
+        max-height: 500px;
       }
       .composer header {
         display: flex;
@@ -490,8 +496,8 @@
     <div class="main__body">
       <!-- Sidebar Starts -->
       <div class="sidebar">
-        <button class="sidebar__compose">
-          <span class="material-icons"> add </span>Compose
+        <button class="sidebar__compose" onclick="toggleCompose()">
+          <span class="material-icons" > add </span>Compose
         </button>
         <div class="sidebarOption sidebarOption__active">
           <span class="material-icons"> inbox </span>
@@ -607,7 +613,7 @@
       </div>
       <!-- Email List Ends -->
     </div>
-    <div class="composer">
+    <div class="composer" id="subCompose">
       <header>
         <div class="new">Thư mới</div>
         <div class="function">
@@ -648,6 +654,11 @@
     let subMenu = document.getElementById("subMenu");
     function toggleMenu() {
       subMenu.classList.toggle("open-menu");
+    }
+
+    let subCompose = document.getElementById("subCompose");
+    function toggleCompose() {
+      subCompose.classList.toggle("open-compose")
     }
   </script>
 </html>

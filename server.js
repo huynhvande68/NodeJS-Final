@@ -12,6 +12,8 @@ app.use(session({cookie: { maxAge : 60000}}));
 app.use(flash());
 app.set('view engine', 'ejs');
 
+
+
 app.use('/account', AccountRouter);
 app.use(express.static("public"));
 app.get('/', (req, res) => {
