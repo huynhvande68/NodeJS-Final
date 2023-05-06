@@ -10,5 +10,7 @@ app.get('/register', homeController.getRegister);
 app.post('/register',homeController.postRegister);
 app.get('/change-password',homeController.getChangePassword);
 app.post('/change-password',homeController.postChangePassword);
+app.get('/change-profile',homeController.getChangeProfile);
+app.post('/change-profile',homeController.postChangeProfile);
 
 module.exports = app

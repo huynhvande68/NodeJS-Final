@@ -97,6 +97,79 @@ const changePasswordValidator = [
       return true;
     }),
 ];
+const updateValidator = [
+  check('name')
+    .notEmpty()
+    .withMessage("Không được để trống tên người dùng")
+    .matches(/^([a-zA-Z]+\s[a-zA-Z]+)+$/)
+    .withMessage("Tên người dùng phải chỉ chứa các ký tự chữ cái và khoảng trắng và phải có ít nhất 2 từ")
+    .isLength({ min: 6 })
+    .withMessage("Tên người dùng phải từ 6 kí tự"),
+
+  check("phone")
+    .notEmpty()
+    .withMessage("Không được để trống số điện thoại người dùng")
+    .isLength({ min: 10 })
+    .withMessage("Số điện thoại phải từ 10 số"),
+];
+
+let getChangeProfile = (req, res) => {
+  
+  const error = req.flash("error") || "";
+  const name = req.flash("name") || "";
+  const phone = req.flash("phone") || "";
+
+  res.render("change-profile", {error: error, name: name, phone: phone});
+}
+
+let postChangeProfile =(updateValidator,(req, res) =>{
+  const result = validationResult(req);
+
+  if (result.errors.length === 0) {
+    const { name, phone } = req.body;
+    const userId = req.session.user.id;
+    
+
+    // Kiểm tra nếu số điện thoại không đủ 10 số thì báo lỗi
+    if (!/^0\d{9}$/.test(phone)) {
+      req.flash("error", "Số điện thoại phải có đúng 10 số và bắt đầu bằng số không");
+      req.flash("name", name);
+      req.flash("phone", phone);
+      return res.redirect("/account/change-profile");
+    }
+
+    const sql = "UPDATE account SET name=?, phone=? WHERE id=?";
+    const params = [name, phone, userId];
+
+    db.query(sql, params, (err, result, fields) => {
+      if (err) {
+        req.flash("error", err.message);
+        req.flash("name", name);
+        req.flash("phone", phone);
+
+        return res.redirect("/account/change-profile");
+      } else if (result.affectedRows === 1) {
+        req.flash("success", "Cập nhật thông tin thành công");
+        return res.redirect("/");
+      } else {
+        req.flash("error", "Cập nhật thông tin thất bại");
+        req.flash("name", name);
+        req.flash("phone", phone);
+
+        return res.redirect("/account/change-profile");
+      }
+    });
+  } else {
+    const errors = result.mapped();
+
+    for (const field in errors) {
+      const message = errors[field].msg;
+      req.flash(field, message);
+    }
+
+    return res.redirect("/account/change-profile");
+  }
+});
 
 let getChangePassword = (req, res) => {
   const error = req.flash("error") || "";
@@ -240,7 +313,12 @@ let postRegister =
 
     if (result.errors.length === 0) {
       const { name, email,phone, password } = req.body;
-
+      if (!/^0\d{9}$/.test(phone)) {
+        req.flash("error", "Số điện thoại phải có đúng 10 số và bắt đầu bằng số không");
+        req.flash("name", name);
+        req.flash("phone", phone);
+        return res.redirect("/account/register");
+      }
       const hashed = bcrypt.hashSync(password, 10);
 
       const sql = "insert into account(name, email,phone, password) values(?,?,?,?)";
@@ -294,4 +372,6 @@ module.exports = {
   postRegister: postRegister,
   postChangePassword: postChangePassword,
   getChangePassword : getChangePassword,
+  postChangeProfile : postChangeProfile,
+  getChangeProfile : getChangeProfile,
 };  
