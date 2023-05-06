@@ -121,6 +121,7 @@ let postLogin =
             //delete results[0].password
             req.session.user = results[0];
             return res.redirect("/");
+            // return res.render('index',{email})
           }
         }
       });
@@ -193,7 +194,7 @@ let postRegister =
         message = result[fields].msg;
         break;
       }
-      const { name, email, password } = req.body;
+      const { name, email,phone, password } = req.body;
 
       req.flash("error", message);
       req.flash("name", name);
@@ -211,4 +212,4 @@ module.exports = {
   getRegister: getRegister,
   postRegister: postRegister,
  
-};
+};  

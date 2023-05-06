@@ -275,7 +275,80 @@
     .emailRow__description {
       font-weight: 400;
       color: gray;
-    }</style>
+    }
+
+    .sub-menu-wrap{
+      position:absolute;
+      top: 55px;
+      right: 2%;
+      width: 300px;
+      z-index: 9999;
+      border-radius: 10px;
+      background: #faf9f9;
+      /* box-shadow:0px 2px 4px 1px #818181; */
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.5s;
+
+    }
+    .sub-menu-wrap.open-menu{
+      max-height: 400px;
+    }
+    .sub-menu{
+      padding: 20px;
+      margin: 10px;
+    }
+    .user-info{
+      display: flex;
+      align-items: center;
+    }
+    .user-info h3{
+      font-weight: 1000;
+    }
+    .user-info h5{
+      display: block;
+      font-weight: 500;
+    }
+    .user-info img{
+      width: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+    .sub-menu hr{
+      border: 0;
+      margin: 15px 0 10px;
+      height: 1px;
+      width: 100%;
+      background: #ccc;
+    }
+    .sub-menu-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #525252;
+      margin: 12px 0;
+    }
+    .sub-menu-link p {
+      width: 100%;
+    }
+    .sub-menu-link img {
+      width: 40px;
+      background: #e5e5e5;
+      border-radius: 50%;
+      padding: 8px;
+      margin-right: 15px;
+    }
+    .sub-menu-link span {
+      font-size: 22px;
+      transition: transform 0.5s;
+    }
+    .sub-menu-link:hover span{
+      transform: translateX(5px);
+    }
+    .sub-menu-link:hover p{
+      font-weight: 600;
+    }
+    </style>
   </head>
   <body>
     <!-- Header Starts -->
@@ -297,9 +370,38 @@
       <div class="header__right">
         <span class="material-icons"> apps </span>
         <span class="material-icons"> notifications </span>
-        <span class="material-icons"> account_circle </span>
+        <span class="material-icons" onclick="toggleMenu()"> account_circle </span>
       </div>
+      
     </div>
+    <nav>
+      <div class="sub-menu-wrap " id="subMenu">
+        <div class="sub-menu">
+          <div class="user-info">
+              <img src="/images/user.png" alt="">
+              <h3><%= user.name %></h3>
+              <h5><%= user.email %></h5>
+          </div>
+          <hr>
+          <a href="#" class="sub-menu-link">
+            <img src="/images/profile.png" alt="">
+            <p>Edit Profile</p>
+            <span>></span>
+          </a>
+          <a href="#" class="sub-menu-link">
+            <img src="/images/setting.png" alt="">
+            <p>Change Password</p>
+            <span>></span>
+          </a>
+          <a href="account/logout" class="sub-menu-link">
+            <img src="/images/logout.png" alt="">
+            <p>Logout</p>
+            <span>></span>
+          </a>
+
+        </div>
+      </div>
+    </nav>
     <!-- Header Ends -->
 
     <!-- Main Body Starts -->
@@ -423,5 +525,11 @@
     </div>
     <!-- Main Body Ends -->
   </body>
-  <script src="script"></script>
+  <script>
+      let subMenu = document.getElementById("subMenu");
+      function toggleMenu(){
+        subMenu.classList.toggle('open-menu');
+      }
+      
+  </script>
 </html>

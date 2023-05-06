@@ -13,7 +13,7 @@ app.use(flash());
 app.set('view engine', 'ejs');
 
 app.use('/account', AccountRouter);
-
+app.use(express.static("public"));
 app.get('/', (req, res) => {
     if(!req.session.user) {
         return res.redirect('/account/login');
