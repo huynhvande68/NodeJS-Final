@@ -70,6 +70,87 @@ const registerValidator = [
     }),
 ];
 
+const changePasswordValidator = [
+  check("currentPassword")
+    .exists()
+    .withMessage("Vui lòng nhập mật khẩu hiện tại")
+    .notEmpty()
+    .withMessage("Không được để trống mật khẩu hiện tại"),
+
+  check("newPassword")
+    .exists()
+    .withMessage("Vui lòng nhập mật khẩu mới")
+    .notEmpty()
+    .withMessage("Không được để trống mật khẩu mới")
+    .isLength({ min: 6 })
+    .withMessage("Mật khẩu mới phải từ 6 kí tự"),
+
+  check("confirmPassword")
+    .exists()
+    .withMessage("Vui lòng xác nhận mật khẩu mới")
+    .notEmpty()
+    .withMessage("Vui lòng nhập xác nhận mật khẩu mới")
+    .custom((value, { req }) => {
+      if (value !== req.body.newPassword) {
+        throw new Error("Mật khẩu mới không khớp");
+      }
+      return true;
+    }),
+];
+
+let getChangePassword = (req, res) => {
+  const error = req.flash("error") || "";
+  const password = req.flash("password") || "";
+  res.render("change-password", { title: "Change Password", error: error, password: password });
+}
+
+let postChangePassword = (changePasswordValidator, (req, res) => {
+  let result = validationResult(req);
+    if (result.errors.length === 0) {
+      const { currentPassword, newPassword, confirmPassword } = req.body;
+      const user = req.session.user;
+        const hashed = user.password;
+        const match = bcrypt.compareSync(currentPassword, hashed);
+        if (!match) {
+          req.flash("error", "Mật khẩu hiện tại không chính xác");
+          res.redirect("/account/change-password");
+        }else if(newPassword !== confirmPassword){
+          req.flash("error", "Mật khẩu mới không khớp");
+          res.redirect("/account/change-password");
+          return;
+        } else {
+          // Update new password
+          const newHashed = bcrypt.hashSync(newPassword, 10);
+          const sql = "UPDATE account SET password = ? WHERE id = ?";
+          const params = [newHashed, user.id];
+  
+          db.query(sql, params, (err, results, fields) => {
+            if (err) {
+              req.flash("error", err.message);
+              res.redirect("/account/change-password");
+            } else {
+              req.flash("success", "Đổi mật khẩu thành công");
+              res.redirect("/");
+            }
+          });
+        }
+      // Check if current password is correct
+    } else {
+      result = result.mapped();
+      console.log(result);
+
+      let message;
+      for (fields in result) {
+        message = result[fields].msg;
+        break;
+      }
+
+      req.flash("error", message);
+      res.redirect("/account/change-password");
+    }
+});
+
+
 let getLogout = (req, res) => {
   //req.session.user = null;
   req.session.destroy();
@@ -211,5 +292,6 @@ module.exports = {
   postLogin: postLogin,
   getRegister: getRegister,
   postRegister: postRegister,
- 
+  postChangePassword: postChangePassword,
+  getChangePassword : getChangePassword,
 };  

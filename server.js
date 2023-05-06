@@ -21,9 +21,14 @@ app.get('/', (req, res) => {
     const user = req.session.user;
   
     res.render('index', {user});
-  
 });
   
+  
+const io = require("socket.io")(server, {
+    cors: {
+      origin: '*'
+    }
+});
 
 
 
