@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <title>Gmail</title>
+</head>
+<body>
+    <!--Header-->
+    <div class="header">
+        <div class="header_left">
+            <span class="material-icons">
+                menu
+            </span>
+        </div>
+        <div class="header_middle">
+            <div class="search-container">
+                <input type="text" name="search" placeholder="Search..." class="search-input">
+                <a href="#" class="search-btn">
+                        <i class="fas fa-search"></i>      
+                </a>
+            </div>
+        </div>
+        <div class="header_right">
+            <span class="material-icons">
+                settings
+            </span>
+
+            <span class="material-icons">
+                apps
+            </span>
+
+            <span class="material-icons account">
+                account_circle
+            </span>
+            <!--<ul class="dropdown">
+                <li ><a id="infor" href="#">Thông tin</a></li>
+                <li id="logout"><button>Đăng xuất</button></li>
+            </ul>-->
+        </div>
+    </div>
+
+    <!--Main body-->
+    <div class="main_body">
+        <!--Sidebar-->
+        <div class="siderbar">
+            <button class="sidebar_compose">
+                <span class="material-icons">add</span>
+                Compose
+            </button>
+
+            <div class="sidebarOption sidebarOption_active">
+                <span class="material-icons">inbox</span>
+                <h3>Inbox</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">star</span>
+                <h3>Started</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">access_time</span>
+                <h3>Snoozed</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">label_important</span>
+                <h3>Important</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">near_me</span>
+                <h3>Sent</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">note</span>
+                <h3>Drafts</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">delete</span>
+                <h3>Trash</h3>
+            </div>
+
+            <div class="sidebarOption">
+                <span class="material-icons">expand_more</span>
+                <h3>More</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="composer">
+       <header>
+        <div class="new">Thư mới</div>
+        <div class="function">
+            <button>
+                <span class="material-icons">remove</span>
+            </button>
+            <button>
+                <span class="material-icons">open_in_full</span>
+            </button>
+            <button>
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+       </header>
+
+       <div class="from">
+            <p>Đến:</p>
+            <input type="text">
+            <a>Cc</a>&nbsp
+            <a>Bcc</a>
+            <input id="CcBb">
+       </div>
+
+       <div class="title">
+            Tiêu đề:
+            <input type="text">
+       </div>
+       <div class="content" style="margin: 5px;">
+            <textarea name="" id="" cols="95" rows="10"></textarea>
+       </div>
+       <div class="send">
+            <button id="send">Gửi</button>
+       </div>
+    </div>
+</body>
+</html>
